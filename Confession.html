@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Suprise For You</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 20% 20%,rgba(245,154,181,.09),transparent 25%),
+        radial-gradient(circle at 80% 70%,rgba(255,200,220,.06),transparent 30%),
+        #6d0b5b;
+    color:#fff7f9;
+    font-family:"DM Sans",sans-serif;
+    overflow-x:hidden;
+}
+:root{
+    --bg:#430e4f;
+    --pink:#e85be8;
+    --muted:#c99aa8;
+    --white:#fff7f9;
+}
+
+.particles{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:0;
+}
+.particle{
+    position:absolute;
+    width:auto;
+    height:auto;
+    color:#ff8fbd;
+    font-size:clamp(18px, 2.5vw, 32px);
+    line-height:1;
+    opacity:.32;
+    text-shadow:
+        0 0 8px rgba(255,110,170,.28),
+        0 0 18px rgba(186,32,186,.18);
+    animation:floatingHeart 9s infinite ease-in-out;
+}
+@keyframes floatingHeart{
+    0%{
+        transform:translate3d(0, 25px, 0) rotate(-10deg) scale(.75);
+        opacity:0;
+    }
+    12%{opacity:.42}
+    50%{
+        transform:translate3d(28px, -90px, 0) rotate(12deg) scale(1);
+        opacity:.7;
+    }
+    82%{opacity:.38}
+    100%{
+        transform:translate3d(-18px, -180px, 0) rotate(-8deg) scale(.8);
+        opacity:0;
+    }
+}
+
+/* PASSWORD */
+#lockScreen{
+    position:fixed;inset:0;z-index:100;background:#250914;
+    display:flex;justify-content:center;align-items:center;
+    transition:opacity 1s ease,visibility 1s ease;
+}
+#lockScreen.hidden{opacity:0;visibility:hidden}
+.lockBox{
+    width:min(380px,90%);padding:40px 30px;text-align:center;
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;box-shadow:0 25px 80px rgba(0,0,0,.4);
+}
+.lockIcon{font-size:30px;margin-bottom:15px}
+.lockBox h2{font-family:"Cormorant Garamond",serif;font-size:32px;margin-bottom:8px}
+.lockBox p{color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:24px}
+.passwordInput{
+    width:100%;padding:13px 15px;background:rgba(0,0,0,.2);
+    border:1px solid rgba(255,255,255,.12);border-radius:10px;
+    outline:none;color:white;text-align:center;
+}
+.passwordInput:focus{border-color:var(--pink)}
+.unlockButton{
+    width:100%;margin-top:14px;padding:13px;border:none;border-radius:10px;
+    background:var(--pink);color:#35101c;font-weight:600;cursor:pointer;transition:.3s;
+}
+.unlockButton:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(245,154,181,.25)}
+.error{min-height:18px;margin-top:12px;color:#ff9cad;font-size:12px}
+
+/* MAIN */
+main{position:relative;z-index:1;display:none}
+main.active{display:block}
+
+.hero{
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    text-align:center;padding:40px 20px;
+}
+.heroContent{max-width:800px}
+.smallText{
+    color:var(--pink);font-size:11px;letter-spacing:4px;
+    text-transform:uppercase;margin-bottom:20px;
+}
+.hero h1{
+    font-family:"Cormorant Garamond",serif;
+    font-size:clamp(60px,10vw,110px);line-height:.85;
+    font-weight:500;margin-bottom:25px;
+}
+.hero h1 span{color:var(--pink);font-style:italic}
+.heroDescription{
+    max-width:500px;margin:auto;color:var(--muted);
+    font-size:14px;line-height:1.8;
+}
+.scrollButton,.backTop{
+    display:inline-block;margin-top:45px;padding:12px 25px;
+    border:1px solid rgba(255,255,255,.15);border-radius:30px;
+    color:white;text-decoration:none;font-size:12px;transition:.3s;
+}
+.scrollButton:hover,.backTop:hover{
+    background:rgba(255,255,255,.07);border-color:var(--pink)
+}
+
+section{
+    min-height:80vh;padding:100px 20px;
+    display:flex;align-items:center;justify-content:center;
+}
+.sectionContainer{width:min(900px,92%);text-align:center}
+.sectionLabel{
+    color:var(--pink);font-size:11px;letter-spacing:4px;
+    text-transform:uppercase;margin-bottom:12px;
+}
+.sectionTitle{
+    font-family:"Cormorant Garamond",serif;
+    font-size:clamp(42px,7vw,70px);font-weight:500;margin-bottom:35px;
+}
+
+/* LETTER */
+.letterCard{
+    max-width:650px;margin:auto;padding:45px;text-align:left;
+    background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.025));
+    border:1px solid rgba(255,255,255,.09);border-radius:18px;
+    box-shadow:0 25px 80px rgba(0,0,0,.25);
+}
+.letterCard h3{
+    font-family:"Cormorant Garamond",serif;color:var(--pink);
+    font-size:28px;margin-bottom:25px;
+}
+.letterCard p{color:#e4c9d1;font-size:14px;line-height:2;margin-bottom:18px}
+.signature{
+    text-align:right;margin-top:30px;color:var(--pink);
+    font-family:"Cormorant Garamond",serif;font-size:25px;font-style:italic;
+}
+
+/* =====================================================
+   THINGS WORTH APPRECIATING
+===================================================== */
+.appreciationSection { min-height: 90vh; }
+
+.appreciationIntro {
+    max-width: 560px;
+    margin: 0 auto 38px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.appreciationGrid {
+    max-width: 850px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.appreciationCard {
+    position: relative;
+    padding: 30px 22px;
+    min-height: 190px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.025));
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+    box-shadow: 0 18px 45px rgba(0,0,0,.18);
+    overflow: hidden;
+    transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease;
+}
+
+.appreciationCard::before {
+    content: "";
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    top: -45px;
+    right: -35px;
+    border-radius: 50%;
+    background: rgba(245,154,181,.08);
+}
+
+.appreciationCard:hover {
+    transform: translateY(-8px);
+    border-color: rgba(245,154,181,.35);
+    box-shadow: 0 25px 55px rgba(0,0,0,.28);
+}
+
+.appreciationNumber {
+    color: var(--pink);
+    font-family: "Cormorant Garamond", serif;
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.appreciationCard h3 {
+    color: var(--white);
+    font-family: "Cormorant Garamond", serif;
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.appreciationCard p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.appreciationHeart {
+    margin-top: 15px;
+    color: var(--pink);
+    font-size: 13px;
+}
+
+@media(max-width:700px) {
+    .appreciationGrid {
+        grid-template-columns: 1fr;
+        max-width: 430px;
+    }
+    .appreciationCard { min-height: 160px; }
+}
+
+/* =====================================================
+   OUR PLAYLIST — PHONE STYLE
+===================================================== */
+.playlistSection { min-height: 100vh; padding-top: 110px; padding-bottom: 110px; }
+
+.playlistIntro {
+    max-width: 560px;
+    margin: 0 auto 34px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.phoneMusic {
+    width: min(370px, 94vw);
+    margin: 0 auto;
+    padding: 16px;
+    border-radius: 38px;
+    background: linear-gradient(145deg, #180812, #3b0d2b 55%, #16070f);
+    border: 2px solid rgba(255,255,255,.10);
+    box-shadow: 0 35px 90px rgba(0,0,0,.45), inset 0 0 0 1px rgba(245,154,181,.06);
+}
+
+.phoneNotch {
+    width: 92px;
+    height: 22px;
+    margin: 0 auto 16px;
+    border-radius: 0 0 16px 16px;
+    background: #090308;
+}
+
+.phoneScreen {
+    border-radius: 28px;
+    padding: 22px 17px 18px;
+    background:
+        radial-gradient(circle at 50% 18%, rgba(245,154,181,.13), transparent 27%),
+        linear-gradient(180deg, rgba(80,17,54,.72), rgba(20,6,15,.95));
+    overflow: hidden;
+}
+
+.playerTopLabel {
+    color: rgba(255,255,255,.52);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+.albumVisual {
+    width: 142px;
+    height: 142px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    padding: 7px;
+    background: linear-gradient(135deg, #f59ab5, #8d2868, #2c0c22);
+    box-shadow: 0 18px 45px rgba(0,0,0,.42);
+}
+
+.albumDisc {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(circle, #f7dbe4 0 9%, #8f3c67 10% 14%, #2a0a1d 15% 31%, #5b1640 32% 34%, #210817 35% 52%, #4b1235 53% 55%, #16050f 56%);
+    border: 3px solid rgba(255,255,255,.12);
+    transition: transform .45s ease;
+}
+
+.phoneMusic.playing .albumDisc {
+    animation: recordSpin 4s linear infinite;
+}
+
+@keyframes recordSpin {
+    to { transform: rotate(360deg); }
+}
+
+.albumHeart {
+    font-size: 26px;
+    color: #fff4f7;
+    text-shadow: 0 0 15px rgba(245,154,181,.5);
+}
+
+.nowPlaying {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.nowPlayingTitle {
+    color: var(--white);
+    font-family: "Cormorant Garamond", serif;
+    font-size: 27px;
+    font-weight: 600;
+    line-height: 1.05;
+}
+
+.nowPlayingArtist {
+    margin-top: 5px;
+    color: var(--pink);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.phoneProgress {
+    height: 3px;
+    background: rgba(255,255,255,.12);
+    border-radius: 10px;
+    margin: 17px 3px 6px;
+    overflow: hidden;
+}
+
+.phoneProgressFill {
+    width: 0%;
+    height: 100%;
+    background: var(--pink);
+    border-radius: inherit;
+    transition: width .25s linear;
+}
+
+.timeRow {
+    display: flex;
+    justify-content: space-between;
+    color: rgba(255,255,255,.45);
+    font-size: 9px;
+}
+
+.playerControls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin: 15px 0 20px;
+}
+
+.playerControl {
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,.07);
+    color: #fff;
+    cursor: pointer;
+    font-size: 15px;
+    transition: .25s ease;
+}
+
+.playerControl:hover {
+    transform: translateY(-2px);
+    background: rgba(245,154,181,.16);
+}
+
+.playerControl.main {
+    width: 52px;
+    height: 52px;
+    background: var(--pink);
+    color: #35101c;
+    font-size: 18px;
+}
+
+.playerControl:focus-visible,
+.songRow:focus-visible {
+    outline: 2px solid var(--pink);
+    outline-offset: 3px;
+}
+
+.realPlayer {
+    margin: 0 -3px 18px;
+    border-radius: 13px;
+    overflow: hidden;
+    background: rgba(0,0,0,.18);
+}
+
+.realPlayer iframe {
+    display: block;
+    width: 100%;
+    height: 152px;
+    border: 0;
+}
+
+.realPlayer.youtube iframe {
+    height: 205px;
+}
+
+.playlistHeading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgba(255,255,255,.55);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 4px 3px 9px;
+}
+
+.songRows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.songRow {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 30px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 9px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: rgba(255,255,255,.035);
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+    transition: .25s ease;
+}
+
+.songRow:hover {
+    background: rgba(255,255,255,.07);
+}
+
+.songRow.active {
+    background: rgba(245,154,181,.10);
+    border-color: rgba(245,154,181,.28);
+}
+
+.songIndex {
+    color: rgba(255,255,255,.4);
+    font-size: 10px;
+    text-align: center;
+}
+
+.songRow.active .songIndex {
+    color: var(--pink);
+}
+
+.songRowTitle {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff5f8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.songRowArtist {
+    margin-top: 2px;
+    color: rgba(201,154,168,.85);
+    font-size: 9px;
+}
+
+.songDuration {
+    color: rgba(255,255,255,.42);
+    font-size: 9px;
+}
+
+.playlistHint {
+    margin-top: 13px;
+    color: rgba(255,255,255,.38);
+    font-size: 9px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+@media(max-width:700px) {
+    .phoneMusic {
+        width: min(350px, 94vw);
+    }
+}
+
+
+/* =====================================================
+   OUR SONG 
+===================================================== */
+
+.phoneMusic{
+    width:min(430px, 95vw);
+    margin:0 auto;
+    padding:18px;
+    border-radius:42px;
+    background:linear-gradient(145deg,#180812,#3b0d2b 55%,#16070f);
+    border:2px solid rgba(255,255,255,.11);
+    box-shadow:
+        0 40px 100px rgba(0,0,0,.5),
+        0 0 45px rgba(186,32,186,.08),
+        inset 0 0 0 1px rgba(245,154,181,.06);
+}
+
+.phoneScreen{
+    border-radius:31px;
+    padding:26px 20px 21px;
+    background:
+        radial-gradient(circle at 50% 16%,rgba(245,154,181,.16),transparent 30%),
+        linear-gradient(180deg,rgba(80,17,54,.76),rgba(20,6,15,.96));
+    overflow:hidden;
+}
+
+.playerTopLabel{
+    color:rgba(255,255,255,.58);
+    font-size:10px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    margin-bottom:20px;
+}
+
+.albumVisual{
+    width:190px;
+    height:190px;
+    margin:0 auto 24px;
+    padding:7px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#f59ab5,#ba20ba,#2c0c22);
+    box-shadow:
+        0 20px 55px rgba(0,0,0,.46),
+        0 0 35px rgba(245,154,181,.12);
+}
+
+.albumCoverImage{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:50%;
+    border:3px solid rgba(255,255,255,.14);
+    box-shadow:inset 0 0 25px rgba(0,0,0,.2);
+    transition:transform .45s ease;
+}
+
+.phoneMusic.playing .albumCoverImage{
+    animation:recordSpin 9s linear infinite;
+}
+
+.nowPlaying{
+    text-align:center;
+    margin-bottom:18px;
+}
+
+.nowPlayingTitle{
+    color:var(--white);
+    font-family:"Cormorant Garamond",serif;
+    font-size:31px;
+    font-weight:600;
+    line-height:1.05;
+}
+
+.nowPlayingArtist{
+    margin-top:6px;
+    color:var(--pink);
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+
+.phoneProgress{
+    height:6px;
+    background:rgba(255,255,255,.12);
+    border-radius:10px;
+    margin:19px 3px 7px;
+    overflow:hidden;
+    cursor:pointer;
+}
+
+.phoneProgressFill{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,#ba20ba,#f59ab5);
+    border-radius:inherit;
+    transition:width .15s linear;
+}
+
+.playerControls{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:24px;
+    margin:18px 0 24px;
+}
+
+.playerControl{
+    width:45px;
+    height:45px;
+    border:0;
+    border-radius:50%;
+    background:rgba(255,255,255,.07);
+    color:#fff;
+    cursor:pointer;
+    font-size:16px;
+    transition:.25s ease;
+}
+
+.playerControl:hover{
+    transform:translateY(-3px) scale(1.04);
+    background:rgba(245,154,181,.17);
+}
+
+.playerControl.main{
+    width:60px;
+    height:60px;
+    background:var(--pink);
+    color:#35101c;
+    font-size:20px;
+    box-shadow:0 10px 28px rgba(186,32,186,.28);
+}
+
+.songRow{
+    padding:13px 11px;
+    border-radius:14px;
+}
+
+.songRowTitle{
+    font-size:13px;
+}
+
+.songRowArtist{
+    margin-top:3px;
+    font-size:10px;
+}
+
+.playlistHint{
+    margin-top:15px;
+    color:rgba(255,255,255,.42);
+    font-size:10px;
+    line-height:1.6;
+    text-align:center;
+}
+
+@media(max-width:700px){
+    .phoneMusic{
+        width:min(390px,94vw);
+    }
+
+    .albumVisual{
+        width:175px;
+        height:175px;
+    }
+
+    .nowPlayingTitle{
+        font-size:28px;
+    }
+}
+
+/* TOPLES KOCOK */
+.jarSection{min-height:100vh;position:relative}
+.jarDescription{
+    max-width:500px;margin:0 auto 30px;color:var(--muted);
+    font-size:14px;line-height:1.8;
+}
+.jarArea{
+    position:relative;width:300px;height:390px;margin:30px auto;
+    display:flex;justify-content:center;align-items:center;
+}
+.jar{
+    position:relative;width:220px;height:275px;
+    border-radius:35px 35px 45px 45px;
+    background:linear-gradient(90deg,rgba(255,255,255,.08),rgba(255,255,255,.025),rgba(255,255,255,.08));
+    border:3px solid rgba(255,215,225,.45);
+    box-shadow:
+        inset 10px 0 25px rgba(255,255,255,.04),
+        inset -10px 0 25px rgba(0,0,0,.15),
+        0 30px 70px rgba(0,0,0,.35);
+    overflow:hidden;
+    transition:transform .2s ease;
+}
+.jar::before{
+    content:"";position:absolute;left:25px;top:25px;width:20px;height:180px;
+    border-radius:20px;background:rgba(255,255,255,.10);transform:rotate(5deg);
+}
+.jarLid{
+    position:absolute;top:-28px;left:22px;width:176px;height:45px;
+    border-radius:10px;background:linear-gradient(#d890a7,#a85d75);
+    border:2px solid rgba(255,220,230,.45);
+    box-shadow:0 8px 15px rgba(0,0,0,.3);z-index:5;
+}
+.notes{position:absolute;inset:40px 15px 15px;overflow:hidden}
+.note{
+    position:absolute;width:50px;height:38px;background:#ffdbe4;border-radius:4px;
+    box-shadow:0 3px 8px rgba(0,0,0,.2);opacity:.9;
+}
+.note:nth-child(1){left:25px;bottom:25px;transform:rotate(-18deg)}
+.note:nth-child(2){left:75px;bottom:35px;transform:rotate(12deg)}
+.note:nth-child(3){left:125px;bottom:20px;transform:rotate(-7deg)}
+.note:nth-child(4){left:45px;bottom:70px;transform:rotate(25deg)}
+.note:nth-child(5){left:105px;bottom:65px;transform:rotate(-20deg)}
+.note:nth-child(6){left:145px;bottom:85px;transform:rotate(10deg)}
+.note:nth-child(7){left:20px;bottom:115px;transform:rotate(-8deg)}
+.note:nth-child(8){left:85px;bottom:110px;transform:rotate(17deg)}
+
+.jar.shaking{animation:shakeJar .12s infinite}
+@keyframes shakeJar{
+    0%{transform:rotate(0) translateX(0)}
+    25%{transform:rotate(-5deg) translateX(-7px)}
+    50%{transform:rotate(5deg) translateX(7px)}
+    75%{transform:rotate(-4deg) translateX(-5px)}
+    100%{transform:rotate(0) translateX(0)}
+}
+.jar.shaking .note{animation:notesShake .15s infinite alternate}
+@keyframes notesShake{
+    from{transform:translateY(-8px) rotate(-10deg)}
+    to{transform:translateY(8px) rotate(12deg)}
+}
+
+.shakeButton{
+    border:none;padding:15px 40px;border-radius:40px;background:var(--pink);
+    color:#35101c;font-size:14px;font-weight:600;cursor:pointer;
+    box-shadow:0 10px 30px rgba(245,154,181,.18);transition:.3s;
+}
+.shakeButton:hover{transform:translateY(-3px);box-shadow:0 15px 35px rgba(245,154,181,.3)}
+.shakeButton:disabled{opacity:.6;cursor:not-allowed}
+
+.messageBox{
+    max-width:550px;margin:40px auto 0;padding:30px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(245,154,181,.25);border-radius:18px;
+    opacity:0;transform:translateY(25px) scale(.95);
+    pointer-events:none;transition:.6s ease;
+}
+.messageBox.show{opacity:1;transform:translateY(0) scale(1)}
+.messageTitle{
+    color:var(--pink);font-family:"Cormorant Garamond",serif;
+    font-size:25px;margin-bottom:12px;
+}
+.messageText{color:#ead3da;font-size:14px;line-height:1.8}
+
+.finalSection{min-height:100vh;text-align:center}
+.finalBox{max-width:650px}
+.finalBox h2{
+    font-family:"Cormorant Garamond",serif;
+    font-size:clamp(50px,9vw,90px);line-height:.9;margin-bottom:30px;
+}
+.finalBox h2 span{color:var(--pink);font-style:italic}
+.finalBox p{color:var(--muted);line-height:2;font-size:14px}
+.backTop{margin-top:40px}
+
+/* NOTE POP */
+.notePop{animation:notePop .8s ease forwards}
+@keyframes notePop{
+    0%{transform:translateY(0) rotate(0) scale(1);opacity:1}
+    50%{transform:translateY(-150px) rotate(20deg) scale(1.15);opacity:1}
+    100%{transform:translateY(-280px) rotate(-10deg) scale(.8);opacity:0}
+}
+
+@media(max-width:700px){
+    .hero h1{font-size:65px}
+    .letterCard{padding:28px 22px}
+    .jar{transform:scale(.9)}
+    .jar.shaking{animation:shakeJarMobile .12s infinite}
+    @keyframes shakeJarMobile{
+        0%{transform:rotate(0) translateX(0) scale(.9)}
+        25%{transform:rotate(-5deg) translateX(-7px) scale(.9)}
+        50%{transform:rotate(5deg) translateX(7px) scale(.9)}
+        75%{transform:rotate(-4deg) translateX(-5px) scale(.9)}
+        100%{transform:rotate(0) translateX(0) scale(.9)}
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="particles" id="particles"></div>
+
+<!-- PASSWORD SCREEN -->
+<div id="lockScreen">
+    <div class="lockBox">
+        <div class="lockIcon">♡</div>
+        <h2>A Little Surprise</h2>
+        <p>There is something waiting for you.<br>Enter the password to continue.</p>
+
+        <input
+            type="password"
+            id="password"
+            class="passwordInput"
+            placeholder="Enter password" aria-label="Password"
+        >
+
+        <button class="unlockButton" onclick="unlock()">Open</button>
+        <div id="error" class="error"></div>
+    </div>
+</div>
+
+<!-- MAIN WEBSITE -->
+<main id="mainContent">
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="heroContent">
+            <div class="smallText">Just For You</div>
+
+            <h1>
+                My<br>
+                <span>Pudding</span>
+            </h1>
+
+            <p class="heroDescription">
+                Today is the day I'll make you mine
+            </p>
+
+            <a href="#letter" class="scrollButton">Continue ↓</a>
+        </div>
+    </section>
+
+    <!-- LETTER -->
+    <section id="letter">
+        <div class="sectionContainer">
+            <div class="sectionLabel">A Confession Letter For You</div>
+
+            <h2 class="sectionTitle">From my heart</h2>
+
+            <div class="letterCard">
+                <h3>To Veren Valensia,</h3>
+
+                <p>
+                    I've been waiting for so long and i can finally give this letter to you. 
+                </p>
+
+                <p>
+                    To my beautiful woman, you are perfect in every way. Not only have you made me fall for you, but 
+                    you've also made me want to give you everything in the whole world, especially my heart. Never 
+                    have i thought having this kind of connection with you would bring so much love and light in my life.
+                    And honestly i feel very lucky to have you by my side, because not everyone is lucky to have someone like you. 
+                    I feel seen every single day when I'm with you. I feel like everytime we're together, i could find peace and love. I hope you feel that as well. 
+                </p>
+
+                <p>
+                    So many times I've faced problems and everytime i think of them, you always suddenly pop out and 
+                    made them all gone, like poof... just vanished into thin air. That's why i always think of you everyday, 
+                    every moment and everyhour. Your whole existence just makes everything made sense.
+                </p>
+
+                <p>
+                    Veren, I value you so much, you're one of my precious person in my life. Please never forget that i 
+                    will never leave you and will always take care of you and no matter what happens, you will always 
+                    be mine. Nothing in the whole world will change how i love you.
+                </p>
+
+                <p>
+                    So to end it all off... are you finally ready to be with me and willingly to make me part of your life?
+                </p>
+
+                <div class="signature">I Love You So Much ♡</div>
+            </div>
+        </div>
+    </section>
+    <!-- THINGS WORTH APPRECIATING -->
+    <section id="appreciating" class="appreciationSection">
+        <div class="sectionContainer">
+
+            <div class="sectionLabel">Love Letters</div>
+
+            <h2 class="sectionTitle">
+                Let me show you how much I love you
+            </h2>
+
+            <p class="appreciationIntro">
+                I know you've been waiting for this so here you are.
+                 Some of my most thoughtfull love letters for you.
+                Please read it with care and also... I LOVE YOUUUU
+            </p>
+
+            <div class="appreciationGrid">
+
+                <div class="appreciationCard">
+                    <div class="appreciationNumber">I</div>
+                    <h3>Dear vae,</h3>
+                    <p> You are so amazing and cool in every way. Honestly, I can't stop thinking of you and I think of you more than anyone else. No one else makes me feel like this other than you.</p>
+                    <div class="appreciationHeart">♡</div>
+                </div>
+
+                <div class="appreciationCard">
+                    <div class="appreciationNumber">Love</div>
+                    <h3>Dear vae,</h3>
+                    <p>I love you, i can't believe you accepted me. Well not entirely but you didn't reject me too. Only in my dreams have i believe this could happen. I'm entirely devoded to you, i would do anything to make you feel safe with me. I love you, more than words can say, more than my actions can show, and even louder than i can sing.</p>
+                    <div class="appreciationHeart">♡</div>
+                </div>
+
+                <div class="appreciationCard">
+                    <div class="appreciationNumber">You</div>
+                    <h3>Dear pudding,</h3>
+                    <p>You are the last thing on my mind when I go to sleep and the very first thing I think of when I wake up. You have captured my heart completely, and there is nowhere else I would rather be than right by your side. I'm so grateful for having you in my life, i couldn't even believe i would found the feeling of love, but then i met you and you're the best thing that has ever happened to me. Living life without you feels like impossible to live on. I couldn't imagine a life where i can't be with you and it's so crazy because I've never once love a person this much.</p>
+                    <div class="appreciationHeart">♡</div>
+                </div>
+
+                <div class="appreciationCard">
+                    <div class="appreciationNumber">My</div>
+                    <h3>My pudding,</h3>
+                    <p>I really love you, and I always will. There's nothing I can imagine that could change how i feel towards you. I've never expected us to be closer with each other, you came into my life at the perfect time and even when we were far apart we became close again like we're destined to be together. I want to thank you for that. No matter what you are or what anyone else says, you are the most precious and special person in my life.</p>
+                    <div class="appreciationHeart">♡</div>
+                </div>
+
+                <div class="appreciationCard">
+                    <div class="appreciationNumber">Forever</div>
+                    <h3>For the love of my life,</h3>
+                    <p>A love like this is something no one can take away from us. My love for you is only yours to keep. There won't be a day where i would give this love for anyone else other than you. Please stay with me forever and never leave my mind. Meeting you was a once in a lifetime opportunity, because who would've thought I actually found my one and true love and I'm so gald that is you. You changed my life. I didn't know what i was looking for in life, but then i met you. I found a friendship and love from the same person. I fould..the love of my life.</p>
+                    <div class="appreciationHeart">♡</div>
+                </div>
+
+                <div class="appreciationCard">
+                    <div class="appreciationNumber">Love</div>
+                    <h3>My everything,</h3>
+                    <p>I want to share everything with you and talk about them with you. Like, having conversations with you makes me feel so connected and more closer with you. You responded me with genuine answers and thoughts, rather than just some random answers. I still can't believe i could have someone amazing like you as a partner. You gave me everything that you value the most and at first im not sure if I can have it because i don't feel like i deserve it that fast. But one thing for sure is that i will do anything to never let you be hurt or dissapointed. You are precious to me, my beautiful georgeous woman.   .</p>
+                    <div class="appreciationHeart">♡</div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- OUR PLAYLIST -->
+    <section id="playlist" class="playlistSection">
+        <div class="sectionContainer">
+
+            <div class="sectionLabel">Songs For Us</div>
+
+            <h2 class="sectionTitle">Our Song</h2>
+
+            <p class="playlistIntro">
+                Some songs For You ♡
+            </p>
+
+            <div class="phoneMusic" id="phoneMusic">
+
+                <div class="phoneNotch"></div>
+
+                <div class="phoneScreen">
+
+                    <div class="playerTopLabel">♡ our little playlist ♡</div>
+
+                    <div class="albumVisual">
+                        <img
+                            id="albumCover"
+                            class="albumCoverImage"
+                            src="covers/bad.jpg"
+                            alt="bad album cover"
+                        >
+                    </div>
+
+                    <div class="nowPlaying">
+                        <div class="nowPlayingTitle" id="nowPlayingTitle">bad</div>
+                        <div class="nowPlayingArtist" id="nowPlayingArtist">wave to earth</div>
+                    </div>
+
+                    <div class="phoneProgress" id="phoneProgress" title="Click to seek">
+                        <div class="phoneProgressFill" id="phoneProgressFill"></div>
+                    </div>
+
+                    <div class="timeRow">
+                        <span id="currentTime">0:00</span>
+                        <span id="totalTime">0:00</span>
+                    </div>
+
+                    <div class="playerControls">
+                        <button class="playerControl" type="button" id="prevSong" aria-label="Previous song">↶</button>
+                        <button class="playerControl main" type="button" id="playSong" aria-label="Play selected song">▶</button>
+                        <button class="playerControl" type="button" id="nextSong" aria-label="Next song">↷</button>
+                    </div>
+
+                    <audio id="playlistAudio" preload="metadata"></audio>
+
+                    <div class="playlistHeading">
+                        <span>Special Playlist</span>
+                        <span id="songCount">3 songs</span>
+                    </div>
+
+                    <div class="songRows">
+
+                        <button class="songRow active" type="button" data-song="0">
+                            <span class="songIndex">01</span>
+                            <span>
+                                <span class="songRowTitle">bad</span>
+                                <span class="songRowArtist">wave to earth</span>
+                            </span>
+                            <span class="songDuration">—</span>
+                        </button>
+
+                        <button class="songRow" type="button" data-song="1">
+                            <span class="songIndex">02</span>
+                            <span>
+                                <span class="songRowTitle">There's nothing holding me back</span>
+                                <span class="songRowArtist">Shawn Mendes</span>
+                            </span>
+                            <span class="songDuration">—</span>
+                        </button>
+
+                        <button class="songRow" type="button" data-song="2">
+                            <span class="songIndex">03</span>
+                            <span>
+                                <span class="songRowTitle">Just the way you are</span>
+                                <span class="songRowArtist">Bruno Mars</span>
+                            </span>
+                            <span class="songDuration">—</span>
+                        </button>
+
+                    </div>
+
+                    <div class="playlistHint">
+                        Tap on the lovely songs for us 
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- TOPLES KOCOK -->
+    <section id="toples" class="jarSection">
+        <div class="sectionContainer">
+
+            <div class="sectionLabel">Someething Fun</div>
+
+            <h2 class="sectionTitle">Shake Shake</h2>
+
+            <p class="jarDescription">
+                Inside the jar is something that i've been keeping to myself
+                <br>
+                Shake the jar to reveal what I've been keeping
+            </p>
+
+            <div class="jarArea">
+                <div class="jar" id="jar">
+                    <div class="jarLid"></div>
+
+                    <div class="notes" id="notes">
+                        <div class="note"></div>
+                        <div class="note"></div>
+                        <div class="note"></div>
+                        <div class="note"></div>
+                        <div class="note"></div>
+                        <div class="note"></div>
+                        <div class="note"></div>
+                        <div class="note"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="shakeButton" id="shakeButton" onclick="shakeJar()">
+                🫙 Shake!
+            </button>
+
+            <div class="messageBox" id="messageBox">
+                <div class="messageTitle" id="messageTitle">
+                    A little message for you ♡
+                </div>
+                <div class="messageText" id="messageText"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL -->
+    <section class="finalSection">
+        <div class="finalBox">
+            <div class="sectionLabel">One Last Thing</div>
+
+            <h2>
+                Thank you<br>
+                <span>for being my forever.</span>
+            </h2>
+
+            <p>
+                Hopefully by this you'll melt more into my arms heheh...
+                <br><br>
+                I Love You My Pudding ♡
+            </p>
+
+            <a href="#" class="backTop">↑ Back to the beginning</a>
+        </div>
+    </section>
+
+</main>
+
+<script>
+
+/* =====================================================
+   PASSWORD
+===================================================== */
+
+const correctPassword = "pudding";
+
+function unlock() {
+    const input = document.getElementById("password").value.trim();
+    const error = document.getElementById("error");
+
+    if (input === correctPassword) {
+        document.getElementById("lockScreen").classList.add("hidden");
+        document.getElementById("mainContent").classList.add("active");
+    } else {
+        error.textContent = "Hint : aku dumpling, kamu...?";
+    }
+}
+
+document.getElementById("password").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") unlock();
+});
+
+
+/* =====================================================
+   BACKGROUND PARTICLES
+===================================================== */
+
+const particleContainer = document.getElementById("particles");
+
+for (let i = 0; i < 30; i++) {
+    const particle = document.createElement("div");
+
+    particle.className = "particle";
+    particle.textContent = Math.random() > 0.45 ? "♥" : "♡";
+    particle.style.left = Math.random() * 100 + "%";
+    particle.style.top = (55 + Math.random() * 55) + "%";
+    particle.style.fontSize = (18 + Math.random() * 18) + "px";
+    particle.style.animationDelay = Math.random() * 9 + "s";
+    particle.style.animationDuration = 7 + Math.random() * 7 + "s";
+
+    particleContainer.appendChild(particle);
+}
+
+
+/* =====================================================
+   OUR PLAYLIST
+===================================================== */
+
+const playlistSongs = [
+    {
+        title: "bad",
+        artist: "wave to earth",
+        file: "music/Bad.mp3",
+        cover: "covers/I.jpg"
+    },
+    {
+        title: "There's nothing holding me back",
+        artist: "Shawn Mendes",
+        file: "music/Shawn.mp3",
+        cover: "covers/Love.jpg"
+    },
+    {
+        title: "Just the way you are",
+        artist: "Bruno Mars",
+        file: "music/Bruno.mp3",
+        cover: "covers/U.jpg"
+    }
+];
+
+let currentSong = 0;
+
+const phoneMusic = document.getElementById("phoneMusic");
+const playlistAudio = document.getElementById("playlistAudio");
+const albumCover = document.getElementById("albumCover");
+const nowPlayingTitle = document.getElementById("nowPlayingTitle");
+const nowPlayingArtist = document.getElementById("nowPlayingArtist");
+const totalTime = document.getElementById("totalTime");
+const currentTime = document.getElementById("currentTime");
+const playSong = document.getElementById("playSong");
+const progressFill = document.getElementById("phoneProgressFill");
+const phoneProgress = document.getElementById("phoneProgress");
+const songRows = document.querySelectorAll(".songRow");
+
+function formatSongTime(seconds) {
+    if (!Number.isFinite(seconds)) return "0:00";
+
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+
+    return minutes + ":" + String(secs).padStart(2, "0");
+}
+
+function setPlayingUI(playing) {
+    phoneMusic.classList.toggle("playing", playing);
+    playSong.textContent = playing ? "❚❚" : "▶";
+    playSong.setAttribute(
+        "aria-label",
+        playing ? "Pause selected song" : "Play selected song"
+    );
+}
+
+function updatePhonePlayer(index, autoplay = false) {
+    currentSong = (index + playlistSongs.length) % playlistSongs.length;
+
+    const song = playlistSongs[currentSong];
+
+    playlistAudio.pause();
+    playlistAudio.src = song.file;
+    playlistAudio.load();
+
+    nowPlayingTitle.textContent = song.title;
+    nowPlayingArtist.textContent = song.artist;
+    albumCover.src = song.cover;
+    albumCover.alt = song.title + " album cover";
+
+    currentTime.textContent = "0:00";
+    totalTime.textContent = "0:00";
+    progressFill.style.width = "0%";
+
+    songRows.forEach((row, i) => {
+        row.classList.toggle("active", i === currentSong);
+    });
+
+    setPlayingUI(false);
+
+    if (autoplay) {
+        playAudio();
+    }
+}
+
+function playAudio() {
+    playlistAudio.play()
+        .then(() => {
+            setPlayingUI(true);
+        })
+        .catch(() => {
+            setPlayingUI(false);
+        });
+}
+
+function pauseAudio() {
+    playlistAudio.pause();
+    setPlayingUI(false);
+}
+
+function toggleAudio() {
+    if (playlistAudio.paused) {
+        playAudio();
+    } else {
+        pauseAudio();
+    }
+}
+
+songRows.forEach((row) => {
+    row.addEventListener("click", () => {
+        updatePhonePlayer(Number(row.dataset.song), true);
+    });
+});
+
+document.getElementById("prevSong").addEventListener("click", () => {
+    updatePhonePlayer(currentSong - 1, true);
+});
+
+document.getElementById("nextSong").addEventListener("click", () => {
+    updatePhonePlayer(currentSong + 1, true);
+});
+
+playSong.addEventListener("click", toggleAudio);
+
+playlistAudio.addEventListener("loadedmetadata", () => {
+    totalTime.textContent = formatSongTime(playlistAudio.duration);
+
+    const activeRow = songRows[currentSong];
+    if (activeRow) {
+        const duration = activeRow.querySelector(".songDuration");
+        if (duration) {
+            duration.textContent = formatSongTime(playlistAudio.duration);
+        }
+    }
+});
+
+playlistAudio.addEventListener("timeupdate", () => {
+    if (!playlistAudio.duration) return;
+
+    const percentage =
+        (playlistAudio.currentTime / playlistAudio.duration) * 100;
+
+    progressFill.style.width = percentage + "%";
+    currentTime.textContent = formatSongTime(playlistAudio.currentTime);
+});
+
+playlistAudio.addEventListener("play", () => {
+    setPlayingUI(true);
+});
+
+playlistAudio.addEventListener("pause", () => {
+    setPlayingUI(false);
+});
+
+playlistAudio.addEventListener("ended", () => {
+    updatePhonePlayer(currentSong + 1, true);
+});
+
+phoneProgress.addEventListener("click", (event) => {
+    if (!playlistAudio.duration) return;
+
+    const rect = phoneProgress.getBoundingClientRect();
+    const percentage =
+        Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+
+    playlistAudio.currentTime =
+        percentage * playlistAudio.duration;
+});
+
+updatePhonePlayer(0, false);
+
+/* =====================================================
+   TOPLES KOCOK MESSAGES
+===================================================== */
+
+const messages = [
+
+    {
+        title: "I Love You",
+        text: "There's no place in the world where a love for you like mine."
+    },
+
+    {
+        title: "Stay With Me",
+        text: "I will never leave you and will always be beside you."
+    },
+
+    {
+        title: "Part Of it",
+        text: "Let me be part of your adventures."
+    },
+
+    {
+        title: "You're Beautiful",
+        text: "I will shout from the rooftop to tell the world how beautiful you are."
+    },
+
+    {
+        title: "Luckiest Person Ever",
+        text: "I still can't believe you're finally mine and mine only."
+    },
+
+    {
+        title: "Don't Forget",
+        text: "I will always be there for you when times are hard."
+    },
+
+    {
+        title: "With You",
+        text: "There's no place i rather be than right by your side."
+    },
+
+    {
+        title: "Smile",
+        text: "Just thinking about you always puts a smile on my face."
+    }
+
+];
+
+let lastMessage = -1;
+let shaking = false;
+
+
+/* =====================================================
+   SHAKE THE JAR
+===================================================== */
+
+function shakeJar() {
+
+    if (shaking) return;
+
+    shaking = true;
+
+    const jar = document.getElementById("jar");
+    const button = document.getElementById("shakeButton");
+    const messageBox = document.getElementById("messageBox");
+    const messageTitle = document.getElementById("messageTitle");
+    const messageText = document.getElementById("messageText");
+    const notes = document.querySelectorAll(".note");
+
+    messageBox.classList.remove("show");
+
+    button.disabled = true;
+    button.textContent = "🫙 Shaking...";
+
+    jar.classList.add("shaking");
+
+    notes.forEach((note, index) => {
+        note.style.animationDelay = index * 0.02 + "s";
+    });
+
+    setTimeout(() => {
+
+        jar.classList.remove("shaking");
+
+        let randomIndex;
+
+        do {
+            randomIndex = Math.floor(Math.random() * messages.length);
+        } while (
+            randomIndex === lastMessage &&
+            messages.length > 1
+        );
+
+        lastMessage = randomIndex;
+
+        const selected = messages[randomIndex];
+
+        const randomNote =
+            notes[Math.floor(Math.random() * notes.length)];
+
+        randomNote.classList.add("notePop");
+
+        setTimeout(() => {
+
+            messageTitle.textContent = selected.title;
+            messageText.textContent = selected.text;
+
+            messageBox.classList.add("show");
+
+            randomNote.classList.remove("notePop");
+
+            button.disabled = false;
+            button.textContent = "🫙 Shake again!";
+
+            shaking = false;
+
+        }, 600);
+
+    }, 1500);
+}
+
+</script>
+
+</body>
+</html>
